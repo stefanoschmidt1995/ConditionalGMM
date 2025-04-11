@@ -2,7 +2,8 @@
 """
 import numpy as np
 import scipy as sp
-from .condGMM import *
+from .condGMM import CondGMM
+from .MNorm import CondMNorm
 
 class UniGMM(object):
     """Conditional Gaussian mixture model of a single random variable.

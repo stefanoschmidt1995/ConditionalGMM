@@ -2,7 +2,7 @@
 """
 import numpy as np
 import scipy as sp
-from .MNorm import *
+from .MNorm import CondMNorm
 
 class CondGMM(object):
     """Conditional Gaussian mixture model. Built from a collection of
@@ -28,7 +28,7 @@ class CondGMM(object):
         weights = np.asarray(weights)
         means = np.asarray(means)
         covs = np.asarray(covs)
-        fixed_indices = np.asarray(fixed_indices, dtype=np.int)
+        fixed_indices = np.asarray(fixed_indices, dtype=int)
         assert weights.ndim == 1
         assert means.ndim == 2
         assert covs.ndim == 3
@@ -249,6 +249,8 @@ class CondGMM(object):
 
         if x2 is None:
             x2 = self.unconditional_x2_mean()
+        x2 = np.atleast_1d(x2)
+        assert len(x2) == self.x2_ndim
 
         if random_state is not None:
             np.random.seed(random_state)
@@ -269,7 +271,7 @@ class CondGMM(object):
             n = len(components[components == i])
             if n == 0: #Skip if no draws
                 continue
-            rvs_i = np.atleast_2d(dists[i].rvs(x2 = x2, size = n))
+            rvs_i = np.atleast_2d(dists[i].rvs(x2 = x2, size = n)).T #Do we need the transpose???
             rvs[i == components] = rvs_i
 
         if component_labels:
