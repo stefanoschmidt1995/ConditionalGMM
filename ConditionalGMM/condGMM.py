@@ -271,7 +271,7 @@ class CondGMM(object):
             n = len(components[components == i])
             if n == 0: #Skip if no draws
                 continue
-            rvs_i = np.atleast_2d(dists[i].rvs(x2 = x2, size = n)).T #Do we need the transpose???
+            rvs_i = dists[i].rvs(x2 = x2, size = n).reshape((n, self.x1_ndim))
             rvs[i == components] = rvs_i
 
         if component_labels:
